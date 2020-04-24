@@ -8,6 +8,7 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 const PostRoutes = require('./routes/post.js');
+const SectionRoutes = require('./routes/section.js');
 
 const app = express();
 const PORT = process.env.PORT || 3010;
@@ -17,6 +18,7 @@ app.use(bodyparser.json());
 app.use(morgan('dev'));
 
 app.use('/post', PostRoutes);
+app.use('/section', SectionRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
