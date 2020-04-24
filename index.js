@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan('dev'));
 
-app.use('/', PostRoutes);
+app.use('/post', PostRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
