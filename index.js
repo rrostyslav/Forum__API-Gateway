@@ -7,8 +7,8 @@ if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-const PostRoutes = require('./routes/post.js');
-const SectionRoutes = require('./routes/section.js');
+const PostRoutes = require('./routes/post');
+const ProfileRoutes = require('./routes/profile');
 
 const app = express();
 const PORT = process.env.PORT || 3010;
@@ -18,7 +18,7 @@ app.use(bodyparser.json());
 app.use(morgan('dev'));
 
 app.use('/post', PostRoutes);
-app.use('/section', SectionRoutes);
+app.use('/profile', ProfileRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
