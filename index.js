@@ -7,7 +7,7 @@ if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-const PostRoutes = require('./routes/post');
+const PostRoutes = require('./routes/posts');
 const ProfileRoutes = require('./routes/profile');
 
 const app = express();
@@ -27,10 +27,11 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    res.status(error.status || 500);
+    const status = error.status || error.response.status || 500;
+    res.status(status);
     res.json({
         error: {
-            message: error.message
+            message: `Server Error ${status}`
         }
     });
 });

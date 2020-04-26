@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
     let role;
     try {
         role = await axios({
-            url: `${process.env.PROFILES_SERVICE}/profile/role/${user.role}`,
+            url: `${process.env.PROFILES_SERVICE}/role/${user.role}`,
             method: 'GET',
             json: true
         });

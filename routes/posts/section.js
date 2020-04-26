@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const axios = require('axios');
 
-const authorization = require('../middleware/authorization');
+const authorization = require('../../middleware/authorization');
 
 router.get('/:id', (req, res, next) => {
     axios({
