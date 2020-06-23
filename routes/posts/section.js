@@ -1,96 +1,94 @@
+'use strict';
 const router = require('express').Router();
 const axios = require('axios');
 
 const authorization = require('../../middleware/authorization');
 
-router.get('/:id', (req, res, next) => {
-    axios({
-        url: process.env.POSTS_SERVICE + req.originalUrl,
-        method: 'GET',
-        json: true
-    })
-        .then(response => {
-            res.status(200).json(response.data);
-        })
-        .catch(err => {
-            res.status(err.response.status).json(err.response.data);
-        });
+router.get('/:id', async (req, res, next) => {
+  try {
+    const response = await axios({
+      url: `${process.env.POSTS_SERVICE}/section/${req.params.id}`,
+      method: 'GET',
+      json: true
+    });
+    res.status(200).json(response.data);
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get('/', (req, res, next) => {
-    axios({
-        url: process.env.POSTS_SERVICE + req.originalUrl,
-        method: 'GET',
-        json: true
-    })
-        .then(response => {
-            res.status(200).json(response.data);
-        })
-        .catch(err => {
-            res.status(err.response.status).json(err.response.data);
-        });
+router.get('/', async (req, res, next) => {
+  try {
+    const response = await axios({
+      url: `${process.env.POSTS_SERVICE}/section`,
+      method: 'GET',
+      json: true
+    });
+    res.status(200).json(response.data);
+  } catch (err) {
+    next(err)
+  };
 });
 
-router.post('/', authorization, (req, res, next) => {
+router.post('/', authorization, async (req, res, next) => {
+  try {
     if (!req.userRights.section_manage) {
-        const error = new Error('Forbidden');
-        error.status = 403;
-        return next();
+      const error = new Error('Forbidden');
+      error.status = 403;
+      throw error;
     }
-    axios({
-        url: process.env.POSTS_SERVICE + req.originalUrl,
-        method: 'POST',
-        data: req.body,
-        json: true
+    const response = await axios({
+      url: `${process.env.POSTS_SERVICE}/section`,
+      method: 'POST',
+      data: req.body,
+      json: true
     })
-        .then(response => {
-            res.status(200).json(response.data);
-        })
-        .catch(err => {
-            res.status(err.response.status).json(err.response.data);
-        });
+    res.status(200).json(response.data);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.put('/:id', authorization, async (req, res, next) => {
+  try {
     if (!req.userRights.section_manage) {
-        const error = new Error('Forbidden');
-        error.status = 403;
-        return next();
+      const error = new Error('Forbidden');
+      error.status = 403;
+      throw error;
     }
-    try {
-        if(!req.body.title) {
-            const error = new Error('Title not provided');
-            error.status = 400;
-            throw error;
-        }
-        const response = await axios({
-            url: process.env.POSTS_SERVICE + req.originalUrl,
-            method: 'PUT',
-            data: req.body,
-            json: true
-        })
-        res.json(response.data);
-    } catch (err) {
-        next(err);
+    if (!req.body.title) {
+      const error = new Error('Title not provided');
+      error.status = 400;
+      throw error;
     }
+    const response = await axios({
+      url: `${process.env.POSTS_SERVICE}/section/${req.params.id}`,
+      method: 'PUT',
+      data: req.body,
+      json: true
+    })
+    res.json(response.data);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.delete('/:id', authorization, async (req, res, next) => {
+  try {
     if (!req.userRights.section_manage) {
-        const error = new Error('Forbidden');
-        error.status = 403;
-        return next();
+      const error = new Error('Forbidden');
+      error.status = 403;
+      throw error;
     }
-    try {
-        const response = await axios({
-            url: process.env.POSTS_SERVICE + req.originalUrl,
-            method: 'DELETE',
-            json: true
-        })
-        res.json(response.data);
-    } catch (err) {
-        next(err);
-    }
+    const response = await axios({
+      url: `${process.env.POSTS_SERVICE}/section/${req.params.id}`,
+      method: 'DELETE',
+      json: true
+    })
+    res.json(response.data);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
